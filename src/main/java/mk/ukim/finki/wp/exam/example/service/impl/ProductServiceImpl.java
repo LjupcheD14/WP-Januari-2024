@@ -1,8 +1,11 @@
 package mk.ukim.finki.wp.exam.example.service.impl;
 
+import mk.ukim.finki.wp.exam.example.model.Category;
 import mk.ukim.finki.wp.exam.example.model.Product;
 import mk.ukim.finki.wp.exam.example.model.exceptions.InvalidCategoryIdException;
 import mk.ukim.finki.wp.exam.example.model.exceptions.InvalidProductIdException;
+import mk.ukim.finki.wp.exam.example.repository.CategoryRepository;
+import mk.ukim.finki.wp.exam.example.repository.ProductRepository;
 import mk.ukim.finki.wp.exam.example.service.ProductService;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +13,21 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
     /**
      * @return List of all products in the database
      */
     @Override
     public List<Product> listAllProducts() {
-        return null;
+        return productRepository.findAll();
     }
 
     /**
@@ -27,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product findById(Long id) {
-        return null;
+        return productRepository.findById(id).orElseThrow(InvalidProductIdException::new);
     }
 
     /**
@@ -42,7 +54,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product create(String name, Double price, Integer quantity, List<Long> categories) {
-        return null;
+        List<Category> categoryList = categoryRepository.findAllById(categories);
+        Product product = new Product(name, price, quantity, categoryList);
+        return productRepository.save(product);
     }
 
     /**
@@ -59,7 +73,14 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product update(Long id, String name, Double price, Integer quantity, List<Long> categories) {
-        return null;
+        List<Category> categoryList = categoryRepository.findAllById(categories);
+        Product product = findById(id);
+
+        product.setName(name);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setCategories(categoryList);
+        return productRepository.save(product);
     }
 
     /**
@@ -71,7 +92,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product delete(Long id) {
-        return null;
+        Product product = findById(id);
+        productRepository.deleteById(id);
+        return product;
     }
 
     /**
