@@ -1,11 +1,17 @@
 package mk.ukim.finki.wp.exam.example.web;
 
+import mk.ukim.finki.wp.exam.example.model.Product;
 import mk.ukim.finki.wp.exam.example.model.User;
 import mk.ukim.finki.wp.exam.example.service.ProductService;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+@Controller
 public class ProductsController {
 
     private final ProductService service;
@@ -15,13 +21,19 @@ public class ProductsController {
     }
 
 
-    public String showProducts(String nameSearch, Long categoryId) {
+    @GetMapping({"/", "/products"})
+    public String showProducts(@RequestParam(required = false) String nameSearch,
+                               @RequestParam(required = false) Long categoryId,
+                               Model model) {
+        List<Product> products;
         if (nameSearch == null && categoryId == null) {
-            this.service.listAllProducts();
+            products = this.service.listAllProducts();
         } else {
-            this.service.listProductsByNameAndCategory(nameSearch, categoryId);
+            products = this.service.listProductsByNameAndCategory(nameSearch, categoryId);
         }
-        return "";
+
+        model.addAttribute("products", products);
+        return "list.html";
     }
 
     public String showAdd() {
