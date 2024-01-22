@@ -35,17 +35,17 @@
             <th>Actions</th>
         </tr>
         <!-- For each product you should have one <tr> like below -->
-        <tr class="item">
-            <td>[prod.name]</td>
-            <td>[prod.price]</td>
-            <td>[prod.quantity]</td>
+        <tr class="item" th:each="prod: ${products}">
+            <td th:text="${prod.name}">[prod.name]</td>
+            <td th:text="${prod.price}">[prod.price]</td>
+            <td th:text="${prod.quantity}">[prod.quantity]</td>
             <td>
                 <ul>
                     <!-- For each product's category you should display one <li> element like the one below -->
-                    <li>[cat.name]</li>
+                    <li th:each="cat: ${prod.categories}" th:text="${cat.name}">[cat.name]</li>
                 </ul>
             </td>
-            <td>[prod.creator]</td>
+            <td th:text="${prod.creator}">[prod.creator]</td>
             <td>
                 <!-- ProductsController.delete -->
                 <form>
