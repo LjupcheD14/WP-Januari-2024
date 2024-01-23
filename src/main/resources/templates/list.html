@@ -48,7 +48,7 @@
             <td th:text="${prod.creator}">[prod.creator]</td>
             <td>
                 <!-- ProductsController.delete -->
-                <form>
+                <form th:method="POST" th:action="@{'/products/{id}/delete' (id=${prod.id})}">
                     <button type="submit" class="delete-item">Delete</button>
                 </form>
                 <!-- ProductsController.showEdit -->
