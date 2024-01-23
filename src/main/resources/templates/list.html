@@ -15,13 +15,13 @@
         <select id="categoryId" name="">
             <option value="">All</option>
             <!-- For each category you should have one <option> like below  -->
-            <option value="[cat.ID]"> [cat.name]</option>
+            <option th:each="cat: ${categories}" th:value="${cat.id}" th:text="${cat.name}"> [cat.name]</option>
         </select>
         <button id="filter" type="submit">Filter</button>
     </form>
     <div>
         <!-- ProductsController.showAdd -->
-        <a href="" class="add-item">
+        <a href="/products/add" class="add-item">
             Add new product
         </a>
     </div>

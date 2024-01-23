@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.exam.example.model.Category;
 import mk.ukim.finki.wp.exam.example.model.exceptions.InvalidCategoryIdException;
 import mk.ukim.finki.wp.exam.example.repository.CategoryRepository;
 import mk.ukim.finki.wp.exam.example.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
@@ -29,7 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(String name) {
-        Category category = new Category(name);
+        Category category = new Category();
+        category.setName(name);
         return categoryRepository.save(category);
     }
 }
